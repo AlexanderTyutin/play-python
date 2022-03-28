@@ -143,7 +143,7 @@ def game_get_question_data(vocabulary):
     for index in range(1, answers_count):
         while True:
             answer_number = random.randint(0, max_number)
-            if answer_number != result_answer_word:
+            if answer_number not in result_choises:
                 result_choises[index] = answer_number
                 break
 
@@ -156,7 +156,7 @@ def game_print_question(vocabulary, shown_word_number, shown_choices):
     """
     Prints question to stdout
     """
-    print(vocabulary[shown_word_number][0])
+    print("\n\t\t\t", vocabulary[shown_word_number][0], "\n")
     index = 0
     for choise in shown_choices:
         index += 1
@@ -174,7 +174,7 @@ def play_game(known_vocabulary):
 
         game_print_question(known_vocabulary, word_number, choises)
 
-        user_choise = input("Enter your choice (0 for exit): ")
+        user_choise = input("\nEnter your choice (0 for exit): ")
 
         try:
             if int(user_choise) == 0:
@@ -183,11 +183,11 @@ def play_game(known_vocabulary):
                 print("\n\t\t\tRight!\n")
             else:
                 print("\n\t\t\tWrong! Right answer:",
-                      choises.index(word_number), "\n")
+                      choises.index(word_number) + 1, "\n")
         except Exception as ex:
             print(
                 "\n\t\t\tYour choice is not acceptable! Type only numbers from 1 to 4!\n")
-            print(str(ex))
+            print("\t\t\t", str(ex))
             user_choise = -1
 
 
