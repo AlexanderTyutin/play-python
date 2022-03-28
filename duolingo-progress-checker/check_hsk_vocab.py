@@ -4,6 +4,7 @@ Script to control progress of HSK vocabulary learning
 """
 
 import sys
+import random
 
 
 def load_hsk_vocabulary(filename):
@@ -98,7 +99,8 @@ def get_args():
         'print-full-hsk': False,
         'print-remaining-hsk': False,
         'print-known-hsk': False,
-        'print-progress': False
+        'print-progress': False,
+        'play-game': False
     }
 
     usage_message = """
@@ -123,8 +125,70 @@ def get_args():
                 result['print-known-hsk'] = True
             elif arg == 'print-progress':
                 result['print-progress'] = True
+            elif arg == 'play-game':
+                result['play-game'] = True
 
     return result
+
+
+def game_get_question_data(vocabulary):
+    """
+    Returns question entities
+    """
+    max_number = len(vocabulary) - 1
+    result_answer_word = random.randint(0, max_number)
+    result_choises = [result_answer_word, -1, -1, -1]
+    answers_count = 4
+
+    for index in range(1, answers_count):
+        while True:
+            answer_number = random.randint(0, max_number)
+            if answer_number != result_answer_word:
+                result_choises[index] = answer_number
+                break
+
+    random.shuffle(result_choises)
+
+    return result_answer_word, result_choises
+
+
+def game_print_question(vocabulary, shown_word_number, shown_choices):
+    """
+    Prints question to stdout
+    """
+    print(vocabulary[shown_word_number][0])
+    index = 0
+    for choise in shown_choices:
+        index += 1
+        print(str(index) + ")", vocabulary[choise][1])
+
+
+def play_game(known_vocabulary):
+    """
+    Runs game to refresh knowledge
+    """
+    user_choise = -1
+
+    while int(user_choise) != 0:
+        word_number, choises = game_get_question_data(known_vocabulary)
+
+        game_print_question(known_vocabulary, word_number, choises)
+
+        user_choise = input("Enter your choice (0 for exit): ")
+
+        try:
+            if int(user_choise) == 0:
+                print("\n\t\t\tGood bye!\n")
+            elif int(user_choise) == choises.index(word_number) + 1:
+                print("\n\t\t\tRight!\n")
+            else:
+                print("\n\t\t\tWrong! Right answer:",
+                      choises.index(word_number), "\n")
+        except Exception as ex:
+            print(
+                "\n\t\t\tYour choice is not acceptable! Type only numbers from 1 to 4!\n")
+            print(str(ex))
+            user_choise = -1
 
 
 def main():
@@ -150,6 +214,9 @@ def main():
 
     if start_args['print-progress']:
         print_progress(hsk_vocabulary, known_words)
+
+    if start_args['play-game']:
+        play_game(known_dict_to_vocabulary(known_words, hsk_vocabulary))
 
 
 if __name__ == "__main__":
