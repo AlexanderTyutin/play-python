@@ -110,7 +110,8 @@ def get_args():
         print-full-hsk          Print full HSK vocabulary from the appropriate file.
         print-remaining-hsk     Print HSK vocabulary words those are unknown yet.
         print-known-hsk         Print only known HSK words with meanings from HSK vocabulary.
-        print-progress          Print graphics "I know this count - I need to learn this count"
+        print-progress          Print graphics "I know this count - I need to learn this count".
+        play-game               Run simple question game to check known words.
     """
 
     if len(sys.argv) == 1:
@@ -210,7 +211,7 @@ def main():
 
     if start_args['print-full-hsk']:
         print("\nHSK Vocabulary:\n")
-        print_vocabulary(hsk_vocabulary, exclusions={})
+        print_vocabulary(hsk_vocabulary)
 
     if start_args['print-progress']:
         print_progress(hsk_vocabulary, known_words)
