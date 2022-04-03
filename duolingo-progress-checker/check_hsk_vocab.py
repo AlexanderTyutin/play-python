@@ -48,7 +48,12 @@ def load_known_words(filename):
     result = {}
     with open(filename) as input_file:
         for line in input_file:
-            result[line.strip()] = True
+            if ';' in line:
+                result[line.strip().split(';')[0]] = True
+            elif '\t' in line:
+                result[line.strip().split('\t')[0]] = True
+            else:
+                result[line.strip()] = True
     return result
 
 
@@ -81,9 +86,11 @@ def print_progress(learn_words, known_words):
             if known_words.get(word[0], False):
                 need_to_learn_count = need_to_learn_count - 1
 
-    print("\nLearned:")
-    print('*' * len(known_words))
-    print("\nNeed to learn:")
+    start_learn_count = len(learn_words)
+
+    print("\nLearned " + str(start_learn_count - need_to_learn_count) + ":")
+    print('*' * (start_learn_count - need_to_learn_count))
+    print("\nNeed to learn " + str(need_to_learn_count) + "/" + str(start_learn_count) + ":")
     print("*" * need_to_learn_count)
     print("")
 
@@ -95,7 +102,7 @@ def get_args():
 
     result = {
         'hsk-vocabulary-file': 'hsk-vocab.txt',
-        'known-words-file': 'known-words.txt',
+        'known-words-file': 'words.duo',
         'print-full-hsk': False,
         'print-remaining-hsk': False,
         'print-known-hsk': False,
@@ -111,6 +118,7 @@ def get_args():
         print-remaining-hsk     Print HSK vocabulary words those are unknown yet.
         print-known-hsk         Print only known HSK words with meanings from HSK vocabulary.
         print-progress          Print graphics "I know this count - I need to learn this count".
+        print-non-hsk           Print non HSK words from the known wordlist file.
         play-game               Run simple question game to check known words.
     """
 
