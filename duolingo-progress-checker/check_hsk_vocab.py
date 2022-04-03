@@ -90,7 +90,8 @@ def print_progress(learn_words, known_words):
 
     print("\nLearned " + str(start_learn_count - need_to_learn_count) + ":")
     print('*' * (start_learn_count - need_to_learn_count))
-    print("\nNeed to learn " + str(need_to_learn_count) + "/" + str(start_learn_count) + ":")
+    print("\nNeed to learn " + str(need_to_learn_count) +
+          "/" + str(start_learn_count) + ":")
     print("*" * need_to_learn_count)
     print("")
 
